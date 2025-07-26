@@ -84,7 +84,7 @@
         padding: 10px 20px;
         border-radius: 20px;
         border: transparent;
-        background-color: #2be4eb;
+        background-color: cadetblue;
       }
 
       .card > div {
@@ -211,9 +211,6 @@
             icon.src = data.current.condition.icon;
             text.textContent = data.current.condition.text;
             temprature.textContent = data.current.temp_c;
-          })
-          .finally(() => {
-            search.value = "";
           });
       }
 
