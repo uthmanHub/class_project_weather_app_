@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uthman Weather App</title>
+    <meta name='description' content='Sign Up Page for Mobile App' />
+    <meta name='keywords' content='weather, location, temperature, condition, rain, cloud' />
+    <meta name='author' content='Uthman Uthmancod' />
+    <meta name='theme-color' content='#63b4ee' />
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
+    <link rel="manifest" href="./favicon/site.webmanifest">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        background-size: cover;
+        justify-content: center;
+        background-repeat: no-repeat;
+        background-image: url("./bg.jpg");
+        height: 100vh;
+      }
+
+      .card {
+        gap: 30px;
+        min-width: 300px;
+        padding: 30px;
+        display: flex;
+        margin: 10% auto 0;
+        border-radius: 10px;
+        align-items: center;
+        height: fit-content;
+        flex-direction: column;
+        backdrop-filter: blur(4px);
+        border: 3px outset white;
+        background-color: rgba(245, 245, 245, 0.297);
+      }
+
+      .card > input {
+        width: 80%;
+        color: black;
+        font-size: 18px;
+        font-weight: 900;
+        padding: 5px 10px;
+        letter-spacing: 1.3px;
+        border-radius: 20px;
+        outline: transparent;
+        border: 3px inset black;
+        text-transform: capitalize;
+        background-color: transparent;
+      }
+
+      .card > button {
+        color: white;
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 20px;
+        border: transparent;
+        background-color: cadetblue;
+      }
+
+      .card > div {
+        text-align: center;
+
+        p {
+          margin: 10px 0;
+        }
+      }
+
+      .location {
+        font-size: 28px;
+        font-weight: bolder;
+      }
+
+      .state {
+        position: relative;
+      }
+
+      .state > img {
+        top: -20px;
+        z-index: -1;
+        left: -35px;
+        position: absolute;
+      }
+
+      .result {
+        display: none;
+      }
+
+      .loader {
+        width: 50px;
+        --b: 8px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        padding: 1px;
+        background: conic-gradient(#0000 10%, #f03355) content-box;
+        -webkit-mask: repeating-conic-gradient(
+            #0000 0deg,
+            #000 1deg 20deg,
+            #0000 21deg 36deg
+          ),
+          radial-gradient(
+            farthest-side,
+            #0000 calc(100% - var(--b) - 1px),
+            #000 calc(100% - var(--b))
+          );
+        -webkit-mask-composite: destination-in;
+        mask-composite: intersect;
+        animation: l4 1s infinite steps(10);
+      }
+      @keyframes l4 {
+        to {
+          transform: rotate(1turn);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>Weather App</h1>
+      <input type="search" name="" id="search" placeholder="Enter city name" />
+      <button class="btn">Search</button>
+
+      <div id="loader"></div>
+
+      <div class="result">
+        <div class="state">
+          <img
+            class="icon"
+            src="http://cdn.weatherapi.com/weather/64x64/day/116.png"
+            width="50px"
+            alt="emoji showing the weather condition"
+          />
+          <span class="location"></span>
+        </div>
+        <h4 class="country"></h4>
+
+        <p>
+          <span class="temp"></span>
+          &deg;C
+        </p>
+
+        <p class="text"></p>
+      </div>
+    </div>
+
+    <script>
+      let search, btn, icon, loc, temprature, text, country, result, loader;
+
+      btn = document.querySelector(".btn");
+      loc = document.querySelector(".location");
+      icon = document.querySelector(".icon");
+      text = document.querySelector(".text");
+      search = document.querySelector("#search");
+      loader = document.querySelector("#loader");
+      result = document.querySelector(".result");
+      country = document.querySelector(".country");
+      temprature = document.querySelector(".temp");
+
+      btn.addEventListener("click", () => {
+        let user_location = search.value.trim();
+
+        if (!user_location) {
+          return alert("please enter a city");
+        }
+
+        // add spinner
+        loader.classList.add("loader");
+        result.classList.add("result");
+
+        fetch(
+          `http://api.weatherapi.com/v1/current.json?key=57517fe015f84622b8495502252207&q=${user_location}&aqi=no`
+        )
+          .then(response => response.json())
+          .then(data => {
+            loader.classList.remove("loader");
+            result.classList.remove("result");
+
+            // update information
+            loc.textContent = data.location.name;
+            country.textContent = data.location.country;
+            icon.src = data.current.condition.icon;
+            text.textContent = data.current.condition.text;
+            temprature.textContent = data.current.temp_c;
+          })
+          .finally(()=>{
+            search.value = ""
+          })
+          
+      });
+    </script>
+  </body>
+</html>
