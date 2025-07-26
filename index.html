@@ -4,14 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Uthman Weather App</title>
-    <meta name='description' content='Sign Up Page for Mobile App' />
-    <meta name='keywords' content='weather, location, temperature, condition, rain, cloud' />
-    <meta name='author' content='Uthman Uthmancod' />
-    <meta name='theme-color' content='#63b4ee' />
-    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
-    <link rel="manifest" href="./favicon/site.webmanifest">
+    <meta name="description" content="Sign Up Page for Mobile App" />
+    <meta
+      name="keywords"
+      content="weather, location, temperature, condition, rain, cloud"
+    />
+    <meta name="author" content="Uthman Uthmancod" />
+    <meta name="theme-color" content="#63b4ee" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./favicon/site.webmanifest" />
     <style>
       * {
         margin: 0;
@@ -55,6 +72,10 @@
         border: 3px inset black;
         text-transform: capitalize;
         background-color: transparent;
+        &::placeholder {
+          color: whitesmoke;
+          font-weight: 500;
+        }
       }
 
       .card > button {
@@ -63,7 +84,7 @@
         padding: 10px 20px;
         border-radius: 20px;
         border: transparent;
-        background-color: cadetblue;
+        background-color: #2be4eb;
       }
 
       .card > div {
@@ -156,16 +177,16 @@
       let search, btn, icon, loc, temprature, text, country, result, loader;
 
       btn = document.querySelector(".btn");
-      loc = document.querySelector(".location");
       icon = document.querySelector(".icon");
       text = document.querySelector(".text");
+      loc = document.querySelector(".location");
       search = document.querySelector("#search");
       loader = document.querySelector("#loader");
       result = document.querySelector(".result");
       country = document.querySelector(".country");
       temprature = document.querySelector(".temp");
 
-      btn.addEventListener("click", () => {
+      function performSearch() {
         let user_location = search.value.trim();
 
         if (!user_location) {
@@ -177,7 +198,7 @@
         result.classList.add("result");
 
         fetch(
-          `http://api.weatherapi.com/v1/current.json?key=57517fe015f84622b8495502252207&q=${user_location}&aqi=no`
+          `https://api.weatherapi.com/v1/current.json?key=57517fe015f84622b8495502252207&q=${user_location}&aqi=no`
         )
           .then(response => response.json())
           .then(data => {
@@ -191,10 +212,17 @@
             text.textContent = data.current.condition.text;
             temprature.textContent = data.current.temp_c;
           })
-          .finally(()=>{
-            search.value = ""
-          })
-          
+          .finally(() => {
+            search.value = "";
+          });
+      }
+
+      btn.addEventListener("click", performSearch);
+
+      search.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          performSearch();
+        }
       });
     </script>
   </body>
